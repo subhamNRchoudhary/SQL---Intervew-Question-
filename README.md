@@ -51,7 +51,7 @@ All the questions related to SQL
 
 
 
-To make your work easier when dealing with large datasets in SQL, especially when performing complex operations like indexing, ranking, and analytical calculations, it's essential to understand and effectively utilize various SQL techniques. Here's a guide on how to approach these tasks, along with additional questions for practice.
+
 
 ### 1. **Indexing**
    - **Tip:** Create indexes on columns that are frequently used in `JOIN` conditions, `WHERE` clauses, and as part of the `ORDER BY` clause. This speeds up data retrieval by reducing the number of rows scanned.
