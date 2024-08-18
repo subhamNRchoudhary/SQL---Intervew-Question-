@@ -1,4 +1,4 @@
-# SQL---Interview-Question-
+# SQL---Interview-Question
 All the questions related to SQL
 
 
