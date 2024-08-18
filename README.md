@@ -134,6 +134,148 @@ To make your work easier when dealing with large datasets in SQL, especially whe
      - Use `NTILE()` to divide rows into buckets.
 
 
+### 1. **What is a correlated subquery, and how does it differ from a regular subquery?**
+   - **Correlated Subquery:** A correlated subquery is a subquery that references columns from the outer query. It is executed repeatedly, once for each row in the outer query.
+     - **Example:**
+       ```sql
+       SELECT e1.EmployeeID, e1.Salary
+       FROM Employees e1
+       WHERE e1.Salary > (SELECT AVG(e2.Salary) FROM Employees e2 WHERE e2.DepartmentID = e1.DepartmentID);
+       ```
+       In this example, the subquery is correlated with the outer query because it references `e1.DepartmentID`.
+   - **Regular Subquery:** A regular subquery, or non-correlated subquery, is independent of the outer query. It is executed once and the result is passed to the outer query.
+     - **Example:**
+       ```sql
+       SELECT EmployeeID, Salary
+       FROM Employees
+       WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+       ```
+       Here, the subquery calculates the average salary of all employees and compares each employee’s salary to this value.
+
+### 2. **Explain how to use the `LEAD()` and `LAG()` functions in SQL. Provide an example.**
+   - **`LEAD()` Function:** Retrieves the value from the next row in the result set, based on the specified ordering.
+   - **`LAG()` Function:** Retrieves the value from the previous row in the result set, based on the specified ordering.
+     - **Example:**
+       ```sql
+       SELECT 
+           EmployeeID, 
+           Salary, 
+           LEAD(Salary, 1) OVER (ORDER BY Salary) AS NextSalary,
+           LAG(Salary, 1) OVER (ORDER BY Salary) AS PreviousSalary
+       FROM Employees;
+       ```
+       In this example, `LEAD(Salary, 1)` gets the next employee's salary, and `LAG(Salary, 1)` gets the previous employee's salary.
+
+### 3. **How would you calculate a moving average for sales data over a 7-day period?**
+   - **Moving Average Calculation:**
+     - **Example:**
+       ```sql
+       SELECT 
+           SaleDate, 
+           SalesAmount, 
+           AVG(SalesAmount) OVER (ORDER BY SaleDate ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS MovingAverage
+       FROM Sales;
+       ```
+       This query calculates the 7-day moving average by averaging the sales amount from the current row and the previous 6 rows.
+
+### 4. **What is the difference between `ROW_NUMBER()` and `RANK()` in SQL?**
+   - **`ROW_NUMBER()`:** Assigns a unique sequential number to rows, starting at 1 for the first row.
+   - **`RANK()`:** Assigns a rank to each row within a partition of the result set. If two rows have the same rank, the next rank(s) are skipped.
+     - **Example:**
+       ```sql
+       SELECT 
+           EmployeeID, 
+           Salary, 
+           ROW_NUMBER() OVER (ORDER BY Salary DESC) AS RowNum,
+           RANK() OVER (ORDER BY Salary DESC) AS Rank
+       FROM Employees;
+       ```
+       If two employees have the same salary, `ROW_NUMBER()` will still assign unique numbers, but `RANK()` will assign the same rank to both.
+
+### 5. **How can you use CTEs to manage hierarchical data, such as an employee organizational chart?**
+   - **Using CTEs for Hierarchical Data:**
+     - **Example:**
+       ```sql
+       WITH EmployeeCTE AS (
+           SELECT EmployeeID, Name, ManagerID, 1 AS Level
+           FROM Employees
+           WHERE ManagerID IS NULL  -- Start with top-level managers
+           UNION ALL
+           SELECT e.EmployeeID, e.Name, e.ManagerID, c.Level + 1
+           FROM Employees e
+           INNER JOIN EmployeeCTE c ON e.ManagerID = c.EmployeeID
+       )
+       SELECT * FROM EmployeeCTE ORDER BY Level;
+       ```
+       This CTE recursively builds the organizational chart, starting from top-level managers and progressing down the hierarchy.
+
+### 6. **Describe how to calculate a rolling sum over a partitioned dataset.**
+   - **Rolling Sum Calculation:**
+     - **Example:**
+       ```sql
+       SELECT 
+           DepartmentID, 
+           EmployeeID, 
+           Salary, 
+           SUM(Salary) OVER (PARTITION BY DepartmentID ORDER BY EmployeeID ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS RollingSum
+       FROM Employees;
+       ```
+       This query calculates the rolling sum of salaries within each department over the current row and the previous two rows.
+
+### 7. **What is the purpose of `NTILE()` in SQL, and how would you use it?**
+   - **Purpose of `NTILE()`:** The `NTILE()` function distributes rows into a specified number of approximately equal buckets or groups.
+     - **Example:**
+       ```sql
+       SELECT 
+           EmployeeID, 
+           Salary, 
+           NTILE(4) OVER (ORDER BY Salary DESC) AS SalaryQuartile
+       FROM Employees;
+       ```
+       This divides employees into four groups based on their salaries, creating salary quartiles.
+
+### 8. **Explain how to perform date manipulation to find the number of weekdays between two dates.**
+   - **Date Manipulation for Weekdays:**
+     - **Example:**
+       ```sql
+       SELECT 
+           StartDate, 
+           EndDate,
+           (DATEDIFF(DAY, StartDate, EndDate) + 1) 
+           - (DATEDIFF(WEEK, StartDate, EndDate) * 2)
+           - (CASE WHEN DATENAME(WEEKDAY, StartDate) = 'Sunday' THEN 1 ELSE 0 END)
+           - (CASE WHEN DATENAME(WEEKDAY, EndDate) = 'Saturday' THEN 1 ELSE 0 END) 
+           AS WeekdaysCount
+       FROM DateTable;
+       ```
+       This query calculates the number of weekdays between two dates, adjusting for weekends.
+
+### 9. **How do you handle NULL values in SQL during aggregation?**
+   - **Handling NULL Values:**
+     - **Example:**
+       ```sql
+       SELECT 
+           DepartmentID, 
+           SUM(ISNULL(Salary, 0)) AS TotalSalary
+       FROM Employees
+       GROUP BY DepartmentID;
+       ```
+       Use `ISNULL()` or `COALESCE()` to replace `NULL` values with a default value before performing aggregations.
+
+### 10. **Describe a scenario where using a window function would be more beneficial than a subquery.**
+   - **Scenario for Window Function:**
+     - **Example:** Calculating cumulative sales within each region.
+       ```sql
+       SELECT 
+           Region, 
+           SaleDate, 
+           SalesAmount, 
+           SUM(SalesAmount) OVER (PARTITION BY Region ORDER BY SaleDate) AS CumulativeSales
+       FROM Sales;
+       ```
+       Here, a window function is more efficient than a subquery because it avoids repeated execution of the subquery and provides cumulative results directly, making the query more readable and performant.
+
+
 
 
 
