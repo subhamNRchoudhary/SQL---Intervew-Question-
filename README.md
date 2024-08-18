@@ -304,5 +304,83 @@ All the questions related to SQL
     - *DROP:* Removes a table or database completely.
     - *TRUNCATE:* Removes all rows from a table without logging individual row 
 
+    Here's an explanation of different types of SQL commands and queries:
+
+### SQL Command Types
+
+1. **DML (Data Manipulation Language)**:
+   - **Purpose**: Used to manage and manipulate data within tables.
+   - **Commands**: 
+     - `SELECT` - Retrieve data from a database.
+     - `INSERT` - Add new rows to a table.
+     - `UPDATE` - Modify existing data in a table.
+     - `DELETE` - Remove rows from a table.
+
+2. **DDL (Data Definition Language)**:
+   - **Purpose**: Used to define and manage the structure of database objects.
+   - **Commands**:
+     - `CREATE` - Create new tables, views, indexes, etc.
+     - `ALTER` - Modify existing database objects.
+     - `DROP` - Delete database objects.
+     - `TRUNCATE` - Remove all rows from a table (but keeps the table structure).
+
+3. **DCL (Data Control Language)**:
+   - **Purpose**: Used to control access to data in the database.
+   - **Commands**:
+     - `GRANT` - Provide specific privileges to users.
+     - `REVOKE` - Remove specific privileges from users.
+
+4. **TCL (Transaction Control Language)**:
+   - **Purpose**: Used to manage transactions in a database.
+   - **Commands**:
+     - `COMMIT` - Save all changes made in the current transaction.
+     - `ROLLBACK` - Undo changes made in the current transaction.
+     - `SAVEPOINT` - Set a point in the transaction to which you can later roll back.
+
+### SQL Queries
+
+1. **Find the Second Highest Salary**:
+
+   To find the second highest salary, you can use a subquery with `LIMIT` or `ROW_NUMBER()` depending on the SQL dialect.
+
+   **Using a Subquery**:
+   ```SQL
+   SELECT MAX(salary) AS second_highest_salary
+   FROM employees
+   WHERE salary < (SELECT MAX(salary) FROM employees);
+   ```
+
+   **Using `ROW_NUMBER()` (if supported)**:
+   ```SQL
+   WITH RankedSalaries AS (
+       SELECT salary, ROW_NUMBER() OVER (ORDER BY salary DESC) AS rank
+       FROM employees
+   )
+   SELECT salary AS second_highest_salary
+   FROM RankedSalaries
+   WHERE rank = 2;
+   ```
+
+2. **Write a Query to Extract Employee Names in the Sales Department**:
+
+   Assuming you have an `employees` table and a `department` column:
+
+   ```SQL
+   SELECT employee_name
+   FROM employees
+   WHERE department = 'Sales';
+   ```
+
+   If the `department` information is in a separate table, you might need to join the tables. For example:
+
+   ```SQL
+   SELECT e.employee_name
+   FROM employees e
+   JOIN departments d ON e.department_id = d.department_id
+   WHERE d.department_name = 'Sales';
+   ```
+
+ 
+
 
 
