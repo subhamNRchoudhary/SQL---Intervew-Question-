@@ -2,7 +2,7 @@
 All the questions related to SQL
 
 
-Here are some top SQL questions frequently asked in interviews:
+
 
 ### 1. **What is the difference between `INNER JOIN` and `OUTER JOIN`?**
    - **Answer:** `INNER JOIN` returns only the matching rows from both tables, while `OUTER JOIN` returns all rows from one table and the matching rows from the other. If there's no match, NULL values are returned for the non-matching side.
@@ -48,4 +48,4 @@ Here are some top SQL questions frequently asked in interviews:
      - **Isolation:** Transactions are executed in isolation.
      - **Durability:** Once a transaction is committed, it remains so, even in the event of a system failure.
 
-These questions cover a range of fundamental and advanced SQL topics that are often explored during technical interviews for data-related roles.
+
