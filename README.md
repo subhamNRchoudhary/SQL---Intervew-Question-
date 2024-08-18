@@ -276,7 +276,33 @@ All the questions related to SQL
        Here, a window function is more efficient than a subquery because it avoids repeated execution of the subquery and provides cumulative results directly, making the query more readable and performant.
 
 
+ *Write a query to extract employee name in the sales department:*
+    SQL
+    SELECT employee_name
+    FROM employees
+    WHERE department = 'Sales';
+    
 
+ *Explain indexing in SQL:*
+    - *Indexing* improves the speed of data retrieval operations on a database table at the cost of additional storage and slower writes.
+
+ *Explain what a pivot table does:*
+    - A pivot table is a data summarization tool that aggregates data and enables quick data analysis, typically used for sorting, counting, and averaging data.
+
+ *Explain the INDEX and MATCH function in Excel:*
+    - *INDEX:* Returns a value from a specified position in a range.
+    - *MATCH:* Returns the relative position of an item in a range that matches a specified value.
+    - *Formula Example:*
+      Excel
+      =INDEX(A1:A10, MATCH(B1, B1:B10, 0))
+      
+
+### SQL and Excel Functions
+
+ *Explain DELETE, DROP, and TRUNCATE functions:*
+    - *DELETE:* Removes rows from a table based on a condition.
+    - *DROP:* Removes a table or database completely.
+    - *TRUNCATE:* Removes all rows from a table without logging individual row 
 
 
 
