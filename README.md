@@ -380,7 +380,162 @@ All the questions related to SQL
    WHERE d.department_name = 'Sales';
    ```
 
- 
+ These are some great best practices for writing efficient and readable SQL code. Here’s a breakdown of each guideline:
+
+1. **Write SQL keywords in capital letters:**  
+   Using capital letters for SQL keywords like `SELECT`, `FROM`, `WHERE`, `JOIN`, etc., helps in differentiating them from table names, columns, and other elements. It enhances the readability of the query.
+
+2. **Use table aliases with columns when joining multiple tables:**  
+   Table aliases help in making your SQL queries shorter and easier to read, especially when you are dealing with multiple tables. For instance:
+   ```sql
+   SELECT A.column1, B.column2
+   FROM table1 AS A
+   JOIN table2 AS B ON A.id = B.id;
+   ```
+
+3. **Never use `SELECT *`; always mention the list of columns in the `SELECT` clause:**  
+   Using `SELECT *` can lead to unnecessary data retrieval, which can be inefficient. It’s better to specify the columns you need:
+   ```sql
+   SELECT column1, column2
+   FROM table1;
+   ```
+
+4. **Add useful comments wherever you write complex logic. Avoid too many comments:**  
+   Comments can explain why certain complex logic is used, making the code easier to understand. However, over-commenting can clutter the code. Keep comments concise and to the point.
+   ```sql
+   -- This join is used to combine data from table1 and table2 based on the id column
+   SELECT A.column1, B.column2
+   FROM table1 AS A
+   JOIN table2 AS B ON A.id = B.id;
+   ```
+
+5. **Use `JOIN` instead of subqueries when possible for better performance:**  
+   Joins are generally more efficient than subqueries, especially for large datasets, because the database can optimize the join operation better.
+
+6. **Create CTEs (Common Table Expressions) instead of multiple subqueries; it will make your query easy to read:**  
+   CTEs can simplify complex queries by breaking them down into more manageable parts:
+   ```sql
+   WITH CTE AS (
+       SELECT column1, column2
+       FROM table1
+       WHERE condition
+   )
+   SELECT *
+   FROM CTE;
+   ```
+
+7. **Join tables using `JOIN` keywords instead of writing join conditions in the `WHERE` clause for better readability:**  
+   Using explicit `JOIN` syntax makes the intention of the query clearer and easier to understand:
+   ```sql
+   SELECT A.column1, B.column2
+   FROM table1 AS A
+   JOIN table2 AS B ON A.id = B.id;
+   ```
+
+8. **Never use `ORDER BY` in subqueries; it will unnecessarily increase runtime:**  
+   Ordering in subqueries can lead to inefficient execution plans. Instead, apply `ORDER BY` in the outer query if needed:
+   ```sql
+   SELECT *
+   FROM (
+       SELECT column1, column2
+       FROM table1
+   ) AS subquery
+   ORDER BY column1;
+   ```
+
+9. **If you know there are no duplicates in two tables, use `UNION ALL` instead of `UNION` for better performance:**  
+   `UNION` removes duplicates, which can be costly in terms of performance. If you are sure there are no duplicates, `UNION ALL` is more efficient:
+   ```sql
+   SELECT column1 FROM table1
+   UNION ALL
+   SELECT column1 FROM table2;
+   ```
 
 
+### 1. How to Find Duplicates in a Table
+To find duplicates in a table, you can group by the columns that should be unique and use the `HAVING` clause to filter groups with a count greater than 1.
 
+```sql
+SELECT column1, column2, COUNT(*)
+FROM your_table
+GROUP BY column1, column2
+HAVING COUNT(*) > 1;
+```
+
+### 2. How to Delete Duplicates from a Table
+To delete duplicates, you can use a `CTE` with `ROW_NUMBER()` to identify duplicates and then delete those rows.
+
+```sql
+WITH CTE AS (
+    SELECT *, ROW_NUMBER() OVER(PARTITION BY column1, column2 ORDER BY (SELECT 1)) AS rn
+    FROM your_table
+)
+DELETE FROM your_table
+WHERE id IN (SELECT id FROM CTE WHERE rn > 1);
+```
+
+### 3. Difference Between `UNION` and `UNION ALL`
+- **`UNION`**: Combines the results of two queries and removes duplicate records. It performs an additional step to check for duplicates, which may affect performance.
+- **`UNION ALL`**: Combines the results of two queries without removing duplicates. It's faster because it doesn't check for duplicates.
+
+### 4. Difference Between `RANK`, `ROW_NUMBER`, and `DENSE_RANK`
+- **`ROW_NUMBER()`**: Assigns a unique sequential integer to rows within a partition of a result set, starting at 1.
+- **`RANK()`**: Similar to `ROW_NUMBER()` but gives the same rank to rows with identical values, leaving gaps in the sequence.
+- **`DENSE_RANK()`**: Similar to `RANK()`, but without gaps in the ranking sequence. Rows with identical values receive the same rank.
+
+### 5. Find Records in a Table That Are Not Present in Another Table
+You can use the `LEFT JOIN` with a `NULL` check or a `NOT EXISTS` subquery.
+
+Using `LEFT JOIN`:
+```sql
+SELECT a.*
+FROM table1 a
+LEFT JOIN table2 b ON a.column = b.column
+WHERE b.column IS NULL;
+```
+
+Using `NOT EXISTS`:
+```sql
+SELECT *
+FROM table1 a
+WHERE NOT EXISTS (SELECT 1 FROM table2 b WHERE a.column = b.column);
+```
+
+### 6. Find Second Highest Salary Employees in Each Department
+You can use `DENSE_RANK()` or `ROW_NUMBER()` within a `CTE` to find the second highest salary.
+
+```sql
+WITH CTE AS (
+    SELECT *, DENSE_RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rk
+    FROM employees
+)
+SELECT *
+FROM CTE
+WHERE rk = 2;
+```
+
+### 7. Find Employees with Salary More Than Their Manager's Salary
+Assume `employees` table has columns `employee_id`, `manager_id`, and `salary`.
+
+```sql
+SELECT e1.*
+FROM employees e1
+JOIN employees e2 ON e1.manager_id = e2.employee_id
+WHERE e1.salary > e2.salary;
+```
+
+### 8. Difference Between `INNER JOIN` and `LEFT JOIN`
+- **`INNER JOIN`**: Returns only the rows that have matching values in both tables.
+- **`LEFT JOIN`**: Returns all rows from the left table and matched rows from the right table. If there's no match, `NULL` is returned for columns from the right table.
+
+### 9. Update a Table and Swap Gender Values
+Assume the `gender` column contains values 'M' for Male and 'F' for Female.
+
+```sql
+UPDATE employees
+SET gender = CASE 
+    WHEN gender = 'M' THEN 'F'
+    WHEN gender = 'F' THEN 'M'
+    ELSE gender
+END;
+```
