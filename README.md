@@ -539,3 +539,45 @@ SET gender = CASE
     ELSE gender
 END;
 ```
+![image](https://github.com/user-attachments/assets/ae48edfe-3cfc-4ae1-b162-f3685bb70909)
+![image](https://github.com/user-attachments/assets/f9e83f61-dcd6-4633-92d0-24a1103cefd1)
+
+*SQL | WHERE Clause*
+
+   WHERE keyword is used for fetching filtered data in a result set. It is used to fetch data according to particular criteria. WHERE keyword can also be used to filter data by matching patterns.
+
+![image](https://github.com/user-attachments/assets/6604efc6-e8a0-4b1b-9f5b-a4cfadcd0a5f)
+
+      CREATE TABLE Emp1(
+          EmpID INT PRIMARY KEY,
+          Name VARCHAR(50),
+          Country VARCHAR(50),
+          Age int(2),
+        mob int(10)
+      );
+      -- Insert some sample data into the Customers table
+      INSERT INTO Emp1 (EmpID, Name,Country, Age, mob)
+      VALUES (1, 'Shubham',  'India','23','738479734'),
+             (2, 'Aman ',  'Australia','21','436789555'),
+             (3, 'Naveen', 'Sri lanka','24','34873847'),
+             (4, 'Aditya',  'Austria','21','328440934'),
+             (5, 'Nishant', 'Spain','22','73248679');
+             
+   ---------------------------------------------------------------
+   
+       Select * from Emp1;
+   ![image](https://github.com/user-attachments/assets/d063914e-d152-44a5-b3d6-34138658a064)
+
+    --------
+       select* from Emp1 
+       where Age = 21;
+
+   ![image](https://github.com/user-attachments/assets/35eeb2ba-2891-4638-a102-fb4db161546d)
+    
+    --------
+
+![image](https://github.com/user-attachments/assets/6b18439a-59bf-4809-ae2f-003da65fbdff)
+
+      SELECT * FROM Emp1 WHERE Age=24;    
+    -----
+
