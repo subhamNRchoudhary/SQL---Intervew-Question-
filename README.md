@@ -562,47 +562,42 @@ END;
              (3, 'Naveen', 'Sri lanka','24','34873847'),
              (4, 'Aditya',  'Austria','21','328440934'),
              (5, 'Nishant', 'Spain','22','73248679');
-             ---------------------------------------------------------------
+         
    
        Select * from Emp1;
    ![image](https://github.com/user-attachments/assets/d063914e-d152-44a5-b3d6-34138658a064)
 
-    --------
        select* from Emp1 
        where Age = 21;
 
    ![image](https://github.com/user-attachments/assets/35eeb2ba-2891-4638-a102-fb4db161546d)
     
-    --------
 
 ![image](https://github.com/user-attachments/assets/6b18439a-59bf-4809-ae2f-003da65fbdff)
 
       SELECT * FROM Emp1 WHERE Age=24;    
-    -----
     
       select EmpID,Name,Country
       from Emp1 where Age > 21;
       
 ![image](https://github.com/user-attachments/assets/9af6ac79-cc08-4213-badc-bf2b6d4e137f)
 
-    -------------
 
        SELECT * FROM Emp1 WHERE Age BETWEEN 22 AND 24;
 
    ![image](https://github.com/user-attachments/assets/f5371055-35cf-4824-8776-73926b485777)
 
-       ---------------------------------
 
        SELECT * FROM Emp1 WHERE Name LIKE 'S%'; 
 
    ![image](https://github.com/user-attachments/assets/6d867205-0b2f-484c-99de-32254264f27d)
 
-    -----
+    
 
     SELECT * FROM Emp1 WHERE Name LIKE '%M%';
 
    ![image](https://github.com/user-attachments/assets/bf1f9674-0b48-4bbb-b7af-71cb07ae77cb)
-    ----
+    
 
 *SQL | WITH Clause*
 
