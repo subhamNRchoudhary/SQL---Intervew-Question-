@@ -1,53 +1,53 @@
 *E*
 
-    -- Query to find employees whose name ends with 'T'
-    SELECT * 
-    FROM employee
-    WHERE emp_name LIKE '%T';
+            -- Query to find employees whose name ends with 'T'
+            SELECT * 
+            FROM employee
+            WHERE emp_name LIKE '%T';
     
-    -- Query to perform top 6 operations based on employee ID
-    SELECT * 
-    FROM employee
-    ORDER BY emp_id
-    LIMIT 6;
-
-    1. **Count the total number of employees:**
+            -- Query to perform top 6 operations based on employee ID
+            SELECT * 
+            FROM employee
+            ORDER BY emp_id
+            LIMIT 6;
+        
+            1. **Count the total number of employees:**
+            
+               ```sql
+               SELECT COUNT(*) AS total_employees
+               FROM employee;
+               ```
+            
+            2. **Find the maximum employee ID:**
+            
+               ```sql
+               SELECT MAX(emp_id) AS max_emp_id
+               FROM employee;
+               ```
+            
+            3. **Get the employees sorted by city in ascending order:**
+            
+               ```sql
+               SELECT *
+               FROM employee
+               ORDER BY city ASC;
+               ```
     
-       ```sql
-       SELECT COUNT(*) AS total_employees
-       FROM employee;
-       ```
-    
-    2. **Find the maximum employee ID:**
-    
-       ```sql
-       SELECT MAX(emp_id) AS max_emp_id
-       FROM employee;
-       ```
-    
-    3. **Get the employees sorted by city in ascending order:**
-    
-       ```sql
-       SELECT *
-       FROM employee
-       ORDER BY city ASC;
-       ```
-    
-    4. **Find employees whose name starts with 'A':**
-    
-       ```sql
-       SELECT *
-       FROM employee
-       WHERE emp_name LIKE 'A%';
-       ```
-    
-    5. **Find the average employee ID:**
-    
-       ```sql
-       SELECT AVG(emp_id) AS avg_emp_id
-       FROM employee;
-       ```
--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            4. **Find employees whose name starts with 'A':**
+            
+               ```sql
+               SELECT *
+               FROM employee
+               WHERE emp_name LIKE 'A%';
+               ```
+            
+            5. **Find the average employee ID:**
+            
+               ```sql
+               SELECT AVG(emp_id) AS avg_emp_id
+               FROM employee;
+               ```
+        -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 *E2*
 
@@ -61,48 +61,151 @@
       ```
       
       ### 5 Different Operations with this Data:
+              
+              1. **Calculate the Average Age:**
+                 - Assuming the current date is needed to calculate age, you can calculate the average age of the students.
+              
+                 ```sql
+                 SELECT AVG(DATEDIFF(CURDATE(), date_of_birth) / 365.25) AS average_age
+                 FROM Student;
+                 ```
+              
+              2. **Count the Total Number of Students:**
+              
+                 ```sql
+                 SELECT COUNT(*) AS total_students
+                 FROM Student;
+                 ```
+              
+              3. **Find Students Whose Percentage is Above 80%:**
+              
+                 ```sql
+                 SELECT *
+                 FROM Student
+                 WHERE percentage > 80;
+                 ```
       
-      1. **Calculate the Average Age:**
-         - Assuming the current date is needed to calculate age, you can calculate the average age of the students.
-      
-         ```sql
-         SELECT AVG(DATEDIFF(CURDATE(), date_of_birth) / 365.25) AS average_age
-         FROM Student;
-         ```
-      
-      2. **Count the Total Number of Students:**
-      
-         ```sql
-         SELECT COUNT(*) AS total_students
-         FROM Student;
-         ```
-      
-      3. **Find Students Whose Percentage is Above 80%:**
-      
-         ```sql
-         SELECT *
-         FROM Student
-         WHERE percentage > 80;
-         ```
-      
-      4. **Get the Students Sorted by Last Name:**
-      
-         ```sql
-         SELECT *
-         FROM Student
-         ORDER BY last_name ASC;
-         ```
-      
-      5. **Find the Student with the Earliest Date of Birth:**
-      
-         ```sql
-         SELECT *
-         FROM Student
-         ORDER BY date_of_birth ASC
-         LIMIT 1;
-         ```
+              4. **Get the Students Sorted by Last Name:**
+              
+                 ```sql
+                 SELECT *
+                 FROM Student
+                 ORDER BY last_name ASC;
+                 ```
+              
+              5. **Find the Student with the Earliest Date of Birth:**
+              
+                 ```sql
+                 SELECT *
+                 FROM Student
+                 ORDER BY date_of_birth ASC
+                 LIMIT 1;
+                 ```
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
       
   *E3*
 
 
+        1. **Identify users who have multiple sessions.**
+        2. **Calculate the average session duration for those users.**
+        
+        Here’s how you can do it in SQL:
+        
+        ```sql
+        WITH multiple_sessions AS (
+            -- Step 1: Find users with multiple sessions
+            SELECT user_id
+            FROM Sessions
+            GROUP BY user_id
+            HAVING COUNT(session_id) > 1
+        )
+        
+        -- Step 2: Calculate the average session duration for those users
+        SELECT AVG(duration) AS average_duration
+        FROM Sessions
+        WHERE user_id IN (SELECT user_id FROM multiple_sessions);
+        ```
+        
+        ### Explanation:
+        - Step 1: The `WITH multiple_sessions` clause creates a temporary result set that includes only the `user_id` of users who have more than one session.
+        - Step 2: The main query then selects the average duration of sessions for these users. The `IN` clause ensures that only sessions of users with multiple sessions are considered.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+*E4*
+
+
+
+### Dealer Table
+| dealership_id | description     | active |
+|---------------|-----------------|--------|
+| 1             | SRI Santosh     | 1      |
+| 1234          | Dealers         | 0      |
+| 4567          | Sai Parts LTD   | 1      |
+| 1457          | Meghna          | 1      |
+| 3468          | dealership      | 0      |
+| 3             | Vinayak Parts   | 1      |
+| 04            | (Missing Data)  | 0      |
+| 5             | (Missing Data)  | 8      |
+
+### SQL Operations on the Dealer Table:
+
+        1. **Select all active dealerships:**
+           ```sql
+           SELECT * 
+           FROM Dealer 
+           WHERE active = 1;
+           ```
+        
+        2. **Count the number of active dealerships:**
+           ```sql
+           SELECT COUNT(*) AS active_dealerships 
+           FROM Dealer 
+           WHERE active = 1;
+           ```
+        
+        3. **Find dealerships with incomplete descriptions (assuming missing or NULL descriptions are incomplete):**
+           ```sql
+           SELECT * 
+           FROM Dealer 
+           WHERE description IS NULL OR description = '';
+   ```
+
+        4. **List all dealerships sorted by dealership ID:**
+           ```sql
+           SELECT * 
+           FROM Dealer 
+           ORDER BY dealership_id ASC;
+           ```
+        
+        5. **Update the `active` status of a specific dealership (for example, set `active` to `0` for `dealership_id = 1234`):**
+           ```sql
+           UPDATE Dealer 
+           SET active = 0 
+           WHERE dealership_id = 1234;
+   ```
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+*E5*
+
+
+
+        ```sql
+        SELECT 
+            AVG(price) AS average_price,
+            COUNT(*) AS number_of_products_above_1000
+        FROM 
+            sampletable
+        WHERE 
+            price >= 1000;
+        ```
+        
+        ### Explanation:
+        
+        - **AVG(price) AS average_price**: This calculates the average price of all products.
+        - **COUNT(*) AS number_of_products_above_1000**: This counts the number of products where the price is higher than or equal to 1000.
+        - **WHERE price >= 1000**: This condition filters the products to include only those with a price greater than or equal to 1000.
+        
+        This query will return two results:
+        1. The average price of all products.
+        2. The count of products where the price is 1000 or higher.
