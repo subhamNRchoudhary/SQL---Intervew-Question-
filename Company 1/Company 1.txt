@@ -1,1 +1,108 @@
+*E*
+
+    -- Query to find employees whose name ends with 'T'
+    SELECT * 
+    FROM employee
+    WHERE emp_name LIKE '%T';
+    
+    -- Query to perform top 6 operations based on employee ID
+    SELECT * 
+    FROM employee
+    ORDER BY emp_id
+    LIMIT 6;
+
+    1. **Count the total number of employees:**
+    
+       ```sql
+       SELECT COUNT(*) AS total_employees
+       FROM employee;
+       ```
+    
+    2. **Find the maximum employee ID:**
+    
+       ```sql
+       SELECT MAX(emp_id) AS max_emp_id
+       FROM employee;
+       ```
+    
+    3. **Get the employees sorted by city in ascending order:**
+    
+       ```sql
+       SELECT *
+       FROM employee
+       ORDER BY city ASC;
+       ```
+    
+    4. **Find employees whose name starts with 'A':**
+    
+       ```sql
+       SELECT *
+       FROM employee
+       WHERE emp_name LIKE 'A%';
+       ```
+    
+    5. **Find the average employee ID:**
+    
+       ```sql
+       SELECT AVG(emp_id) AS avg_emp_id
+       FROM employee;
+       ```
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+*E2*
+
+
+
+      ### Query to Select Rows Where Phone Number is Missing:
+      ```sql
+      SELECT *
+      FROM Student
+      WHERE phone_no IS NULL;
+      ```
+      
+      ### 5 Different Operations with this Data:
+      
+      1. **Calculate the Average Age:**
+         - Assuming the current date is needed to calculate age, you can calculate the average age of the students.
+      
+         ```sql
+         SELECT AVG(DATEDIFF(CURDATE(), date_of_birth) / 365.25) AS average_age
+         FROM Student;
+         ```
+      
+      2. **Count the Total Number of Students:**
+      
+         ```sql
+         SELECT COUNT(*) AS total_students
+         FROM Student;
+         ```
+      
+      3. **Find Students Whose Percentage is Above 80%:**
+      
+         ```sql
+         SELECT *
+         FROM Student
+         WHERE percentage > 80;
+         ```
+      
+      4. **Get the Students Sorted by Last Name:**
+      
+         ```sql
+         SELECT *
+         FROM Student
+         ORDER BY last_name ASC;
+         ```
+      
+      5. **Find the Student with the Earliest Date of Birth:**
+      
+         ```sql
+         SELECT *
+         FROM Student
+         ORDER BY date_of_birth ASC
+         LIMIT 1;
+         ```
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      
+  *E3*
+
 
