@@ -175,4 +175,4 @@ ROLLBACK;
 
 ---
 
-This cheat sheet can be a quick reference for writing SQL queries efficiently. Let me know if you'd like to expand on any specific topic!
+This cheat sheet can be a quick reference for writing SQL queries efficiently. 
